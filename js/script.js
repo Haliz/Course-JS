@@ -1,39 +1,73 @@
 'use strict';
 
-const personalPlanPeter = {
-    name: "Peter",
-    age: "29",
-    skills: {
-        languages: ['ru', 'eng'],
-        programmingLangs: {
-            js: '20%',
-            php: '10%'
-        },
-        exp: '1 month'
-    },
-    showAgeAndLangs: function(plan) {
-        const {age} = plan;
-        const {languages} = plan.skills;
-        let lang = '';
-        languages.forEach(value => lang += " " + value.toUpperCase());
-        return `Мне ${age} и я владею языками:${lang}`
+const family = ['Peter', 'Ann', 'Alex', 'Linda'];
+
+function showFamily(arr) {
+    if (!arr || !arr.length) {
+        return 'Семья пуста';
+    } else {
+        const familyValue = family.join(' ');
+        return 'Семья состоит из: ' + familyValue;
     }
-};
- console.log(personalPlanPeter.showAgeAndLangs(personalPlanPeter));
-function showExperience(plan) {
-    const {exp} = plan.skills;
-    return exp;
 }
 
-console.log(showExperience(personalPlanPeter));
+console.log(showFamily(family));
 
-function showProgrammingLangs(plan) {
+const favoriteCities = ['liSBon', 'ROME', 'miLan', 'Dublin'];
+
+function standardizeStrings(arr) {
+    arr.forEach(value => console.log(value.toLowerCase()));
+}
+
+standardizeStrings(favoriteCities);
+
+const someString = 'This is some strange string';
+
+/*function reverse(str) {
     let rsl = '';
-    const {programmingLangs} = plan.skills
-    for (let lang in programmingLangs) {
-        rsl += `Язык ${lang} изучен на ${programmingLangs[lang]}\n`;
+    if (typeof str != 'string') {
+        rsl = "Ошибка!"
+    } else {
+        let arr = str.split('');
+        let revArr = [];
+        for (let i = arr.length - 1; i >= 0; i--) {
+            revArr[(arr.length - 1) - i] = arr[i];
+        }
+        rsl = revArr.join('');
     }
     return rsl;
 }
 
-console.log(showProgrammingLangs(personalPlanPeter));
+console.log(reverse(someString));*/
+
+function reverse(str) {
+    if (typeof(str) !== 'string') {
+        return "Ошибка!";
+    }
+    // Самый оптимальный вариант решения
+    return str.split('').reverse().join('');
+
+    // Решение при помощи цикла
+    // let newStr = '';
+    // for (let i = str.length - 1; i >= 0; i--) {
+    //     newStr += str[i];
+    // }
+    // return newStr
+}
+
+console.log(reverse(someString));
+
+const baseCurrencies = ['USD', 'EUR'];
+const additionalCurrencies = ['UAH', 'RUB', 'CNY'];
+
+function availableCurr(arr, missingCurr) {
+    if (!arr || !arr.length) {
+        return  'Нет доступных валют';
+    } else {
+       let rsl = "Доступные валюты:\n";
+       const index = arr.indexOf(missingCurr);
+       delete arr[index];
+       arr.forEach(value => rsl += value + "\n");
+       return rsl;
+    }
+}
