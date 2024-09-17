@@ -1,73 +1,83 @@
+/* Задание на урок:
+
+1) У нас уже есть рабочее приложение, состоящее из отдельных функций. Представьте, что
+перед вами стоит задача переписать его так, чтобы все функции стали методами объекта personalMovieDB
+Такое случается в реальных продуктах при смене технологий или подхода к архитектуре программы
+
+2) Создать метод toggleVisibleMyDB, который при вызове будет проверять свойство privat. Если оно false - он
+переключает его в true, если true - переключает в false. Протестировать вместе с showMyDB.
+
+3) В методе writeYourGenres запретить пользователю нажать кнопку "отмена" или оставлять пустую строку.
+Если он это сделал - возвращать его к этому же вопросу. После того, как все жанры введены -
+при помощи метода forEach вывести в консоль сообщения в таком виде:
+"Любимый жанр #(номер по порядку, начиная с 1) - это (название из массива)"*/
+
+// Код возьмите из предыдущего домашнего задания
 'use strict';
 
-const family = ['Peter', 'Ann', 'Alex', 'Linda'];
 
-function showFamily(arr) {
-    if (!arr || !arr.length) {
-        return 'Семья пуста';
-    } else {
-        const familyValue = family.join(' ');
-        return 'Семья состоит из: ' + familyValue;
-    }
-}
 
-console.log(showFamily(family));
-
-const favoriteCities = ['liSBon', 'ROME', 'miLan', 'Dublin'];
-
-function standardizeStrings(arr) {
-    arr.forEach(value => console.log(value.toLowerCase()));
-}
-
-standardizeStrings(favoriteCities);
-
-const someString = 'This is some strange string';
-
-/*function reverse(str) {
-    let rsl = '';
-    if (typeof str != 'string') {
-        rsl = "Ошибка!"
-    } else {
-        let arr = str.split('');
-        let revArr = [];
-        for (let i = arr.length - 1; i >= 0; i--) {
-            revArr[(arr.length - 1) - i] = arr[i];
+const personalMovieDB = {
+    count: 0,
+    movies: {},
+    actors: {},
+    genres: [],
+    privat: false,
+    start: function () {
+        this.count = +prompt('Сколько фильмов вы уже посмотрели?', '');
+        while (this.count == '' || this.count == null || isNaN(this.count)) {
+            this.count = +prompt('Сколько фильмов вы уже посмотрели?', '');
         }
-        rsl = revArr.join('');
+    },
+    rememberMyFilms: function () {
+        for (let i = 0; i < 2; i++) {
+            const a = prompt('Один из последних просмотренных фильмов?', ''),
+                b = prompt('На сколько оцените его?', '');
+
+            if (a != null && b != null && a != '' && b != '' && a.length < 50) {
+                personalMovieDB.movies[a] = b;
+                console.log('done');
+            } else {
+                console.log('error');
+                i--;
+            }
+        }
+    },
+    detectPersonalLevel: function () {
+        if (personalMovieDB.count < 10) {
+            console.log("Просмотрено довольно мало фильмов");
+        } else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
+            console.log("Вы классический зритель");
+        } else if (personalMovieDB.count >= 30) {
+            console.log("Вы киноман");
+        } else {
+            console.log("Произошла ошибка");
+        }
+    },
+    showMyDB: function () {
+        if (!personalMovieDB['privat']) {
+            console.log(personalMovieDB);
+        }
+    },
+    toggleVisibleMyDB: function (){
+        if (this.privat) {
+            this.privat = false;
+        }else {
+            this.privat = true;
+        }
+    },
+    writeYourGenres: function () {
+        for (let i = 1; i <= 3; i++) {
+            let genre = prompt(`Ваш любимый жанр под номером ${i}`);
+            if (genre == '' || genre == null) {
+                console.log('Вы ввели некорректные данные, или не ввели их вовсе.');
+                i--;
+            } else {
+                personalMovieDB.genres[i - 1] = genre;
+            }
+        }
+        personalMovieDB.genres.forEach((item, i) => {
+            console.log(`Любимый жанр ${i+1} - это ${item}`);
+        });
     }
-    return rsl;
-}
-
-console.log(reverse(someString));*/
-
-function reverse(str) {
-    if (typeof(str) !== 'string') {
-        return "Ошибка!";
-    }
-    // Самый оптимальный вариант решения
-    return str.split('').reverse().join('');
-
-    // Решение при помощи цикла
-    // let newStr = '';
-    // for (let i = str.length - 1; i >= 0; i--) {
-    //     newStr += str[i];
-    // }
-    // return newStr
-}
-
-console.log(reverse(someString));
-
-const baseCurrencies = ['USD', 'EUR'];
-const additionalCurrencies = ['UAH', 'RUB', 'CNY'];
-
-function availableCurr(arr, missingCurr) {
-    if (!arr || !arr.length) {
-        return  'Нет доступных валют';
-    } else {
-       let rsl = "Доступные валюты:\n";
-       const index = arr.indexOf(missingCurr);
-       delete arr[index];
-       arr.forEach(value => rsl += value + "\n");
-       return rsl;
-    }
-}
+};
